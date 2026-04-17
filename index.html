@@ -1,0 +1,142 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skynet Cyber Cafe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+    body{background:#0a0f1c;color:#fff}
+    header{padding:20px;text-align:center;background:#050914;border-bottom:1px solid #00f0ff33}
+    h1{color:#00f0ff;font-size:2rem}
+    nav{display:flex;justify-content:center;gap:15px;padding:10px;background:#050914;border-bottom:1px solid #00f0ff33;flex-wrap:wrap}
+    nav button{background:transparent;border:1px solid #00f0ff;color:#00f0ff;padding:8px 12px;border-radius:6px;cursor:pointer}
+    nav button:hover{background:#00f0ff;color:#000}
+    .hero{padding:70px 20px;text-align:center}
+    .hero h2{font-size:2rem;margin-bottom:10px}
+    .hero p{margin:10px 0 20px;color:#ccc}
+    .btn{padding:12px 20px;background:#00f0ff;color:#000;border:none;border-radius:6px;cursor:pointer;font-weight:600}
+    .btn:hover{opacity:0.85}
+    .section{padding:50px 20px}
+    .section h2{text-align:center;margin-bottom:20px;color:#00f0ff}
+    .services{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+    .card{background:#111a2b;padding:25px;border-radius:12px;cursor:pointer;transition:0.3s;border:1px solid transparent}
+    .card:hover{transform:translateY(-5px);border:1px solid #00f0ff}
+    .hidden{display:none}
+    #details{background:#050914;border-top:1px solid #00f0ff33}
+    input{width:100%;padding:10px;margin:8px 0;border-radius:6px;border:none;outline:none}
+    .form-box{max-width:400px;margin:auto;background:#111a2b;padding:20px;border-radius:10px}
+    footer{text-align:center;padding:20px;background:#050914;margin-top:40px;border-top:1px solid #00f0ff33}
+    a{color:#00f0ff;text-decoration:none}
+  </style>
+</head>
+<body><header>
+  <h1>Skynet Cyber</h1>
+  <p>Fast, Reliable & Professional Digital Services</p>
+</header><nav>
+  <button onclick="showPage('home')">Home</button>
+  <button onclick="showPage('services')">Services</button>
+  <button onclick="showPage('login')">Login</button>
+  <button onclick="showPage('signup')">Sign Up</button>
+</nav><!-- HOME --><section id="home" class="section">
+  <div class="hero">
+    <h2>Your One-Stop Cyber Solution</h2>
+    <p>Printing, KRA, eCitizen, Applications, Design & More</p>
+    <button class="btn" onclick="showPage('services')">View Services</button>
+  </div>
+</section><!-- SERVICES --><section id="services" class="section hidden">
+  <h2>Our Services</h2>
+  <div class="services">
+    <div class="card" onclick="showDetails('internet')">🌐 Internet Cafe</div>
+    <div class="card" onclick="showDetails('cyber')">💻 Cyber Services</div>
+    <div class="card" onclick="showDetails('government')">🏛️ Government Services</div>
+    <div class="card" onclick="showDetails('ecitizen')">📄 eCitizen Services</div>
+    <div class="card" onclick="showDetails('design')">🎨 Graphic Design</div>
+    <div class="card" onclick="showDetails('tech')">🚀 Tech Services</div>
+  </div>  <div id="details" class="section"></div>
+</section><!-- LOGIN --><section id="login" class="section hidden">
+  <h2>Login</h2>
+  <div class="form-box">
+    <input type="text" placeholder="Username" id="loginUser">
+    <input type="password" placeholder="Password" id="loginPass">
+    <button class="btn" onclick="loginUser()">Login</button>
+    <p id="loginMsg"></p>
+  </div>
+</section><!-- SIGNUP --><section id="signup" class="section hidden">
+  <h2>Sign Up</h2>
+  <div class="form-box">
+    <input type="text" placeholder="Username" id="signupUser">
+    <input type="password" placeholder="Password" id="signupPass">
+    <button class="btn" onclick="signupUser()">Create Account</button>
+    <p id="signupMsg"></p>
+  </div>
+</section><!-- CONTACT --><section class="section">
+  <h2>Contact Us</h2>
+  <p>📞 <a href="tel:0716630443">0716630443</a></p>
+  <p>💬 <a href="https://wa.me/254713614441">Chat on WhatsApp</a></p>
+  <p>📧 skynetdigitol@gmail.com</p>
+  <p>📍 Opposite former Western Express, along KAG Church</p>
+</section><footer>
+  <p>© 2026 Skynet Cyber Cafe | All Rights Reserved</p>
+</footer><script>
+function showPage(page){
+  document.querySelectorAll('.section').forEach(s=>s.classList.add('hidden'));
+  document.getElementById(page).classList.remove('hidden');
+}
+
+function showDetails(type){
+  const section=document.getElementById('details');
+
+  let content='';
+
+  if(type==='internet'){
+    content=`<h2>Internet Cafe</h2>
+    <p>Fast browsing at Skynet Cyber Café.</p>
+    <button class='btn' onclick="window.open('http://172.18.162.163')">Access Local Network</button>
+    <p style='font-size:12px'>Only works inside Skynet network</p>`;
+  }
+
+  if(type==='cyber'){
+    content=`<h2>Cyber Services</h2><p>Printing, scanning, typing, binding & more.</p>`;
+  }
+
+  if(type==='government'){
+    content=`<h2>Government Services</h2><p>KRA, NHIF, NSSF, HELB, E-TIMS & more.</p>`;
+  }
+
+  if(type==='ecitizen'){
+    content=`<h2>eCitizen Services</h2><p>Passports, IDs, licenses & registrations.</p>`;
+  }
+
+  if(type==='design'){
+    content=`<h2>Graphic Design</h2><p>Flyers, posters, cards, eulogies & more.</p>`;
+  }
+
+  if(type==='tech'){
+    content=`<h2>Tech Services</h2><p>Website creation, apps & IT consultancy.</p>`;
+  }
+
+  section.innerHTML=content;
+}
+
+// Simple localStorage auth (demo only)
+function signupUser(){
+  let u=document.getElementById('signupUser').value;
+  let p=document.getElementById('signupPass').value;
+  if(!u||!p){document.getElementById('signupMsg').innerText='Fill all fields';return;}
+  localStorage.setItem('user',JSON.stringify({u,p}));
+  document.getElementById('signupMsg').innerText='Account created';
+}
+
+function loginUser(){
+  let u=document.getElementById('loginUser').value;
+  let p=document.getElementById('loginPass').value;
+  let data=JSON.parse(localStorage.getItem('user'));
+  if(data && u===data.u && p===data.p){
+    document.getElementById('loginMsg').innerText='Login successful';
+  }else{
+    document.getElementById('loginMsg').innerText='Invalid credentials';
+  }
+}
+</script></body>
+</html>
