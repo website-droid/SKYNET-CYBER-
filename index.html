@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Skynet Cyber Café • Complete System</title>
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* ===== RESET & THEME ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0b0e14;
+      color: #e0f2fe;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    :root {
+      --neon-blue: #0cf;
+      --neon-glow: 0 0 10px #0cf, 0 0 20px #0cf6;
+      --dark-card: #11161f;
+      --border-glow: 1px solid #2a3a55;
+    }
+    .app { max-width: 1400px; margin: 0 auto; padding: 0 1rem; }
+    
+    /* ===== HEADER ===== */
+    .cyber-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+      border-bottom: 2px solid #0cf3;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+    .logo h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #a0f0ff, #0cf);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: var(--neon-glow);
+    }
+    .logo p { font-size: 0.8rem; opacity: 0.8; letter-spacing: 2px; }
+    
+    .nav-links { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+    .nav-btn {
+      background: transparent;
+      border: 1px solid #2e4b6e;
+      color: #b8d4ff;
+      padding: 0.5rem 1.2rem;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.9rem;
+    }
+    .nav-btn:hover, .nav-btn.active {
+      background: #0cf2;
+      border-color: #0cf;
+      box-shadow: 0 0 12px #0cf6;
+      color: white;
+    }
+    
+    .auth-area { display: flex; align-items: center; gap: 0.5rem; }
+    .user-badge {
+      background: #0a1a2a;
+      padding: 0.3rem 1rem;
+      border-radius: 30px;
+      border: 1px solid #0cf;
+      font-size: 0.9rem;
+    }
+    
+    /* ===== VIEW CONTAINER ===== */
+    .view-container { margin: 2rem 0; animation: fade 0.3s ease; }
+    @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      border-left: 6px solid #0cf;
+      padding-left: 1rem;
+      text-shadow: 0 0 8px #0cf5;
+    }
+    
+    /* ===== CARDS ===== */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1.2rem;
+    }
+    .service-card {
+      background: var(--dark-card);
+      border-radius: 20px;
+      padding: 1.2rem 0.8rem;
+      border: var(--border-glow);
+      box-shadow: 0 10px 20px #00000050;
+      transition: all 0.25s;
+      text-align: center;
+      cursor: pointer;
+    }
+    .service-card:hover {
+      transform: translateY(-5px);
+      border-color: #0cf;
+      box-shadow: 0 0 22px #0cf4, 0 10px 20px #000;
+    }
+    .service-card i { font-size: 2.5rem; color: #0cf; margin-bottom: 0.8rem; }
+    .service-card img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 16px;
+      margin-bottom: 0.8rem;
+      border: 2px solid #0cf5;
+    }
+    .category-badge {
+      font-size: 0.7rem;
+      background: #0cf2;
+      padding: 0.2rem 0.8rem;
+      border-radius: 30px;
+      display: inline-block;
+      margin-top: 0.5rem;
+    }
+    
+    /* ===== FORMS ===== */
+    .form-card {
+      max-width: 420px;
+      margin: 0 auto;
+      background: #101a24;
+      padding: 2rem;
+      border-radius: 30px;
+      border: 1px solid #0cf6;
+      box-shadow: 0 20px 30px #000;
+    }
+    .input-group { margin-bottom: 1.5rem; }
+    .input-group label { display: block; margin-bottom: 0.3rem; font-weight: 500; }
+    .input-group input, .input-group textarea {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      background: #0b1119;
+      border: 1.5px solid #2a4058;
+      border-radius: 40px;
+      color: white;
+      font-size: 1rem;
+      outline: none;
+    }
+    .input-group input:focus, .input-group textarea:focus {
+      border-color: #0cf;
+      box-shadow: 0 0 12px #0cf6;
+    }
+    .btn-primary {
+      background: #0cf;
+      border: none;
+      color: #000;
+      font-weight: 700;
+      padding: 0.9rem 1.5rem;
+      border-radius: 60px;
+      width: 100%;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 0 18px #0cf9;
+      transition: 0.2s;
+    }
+    .btn-primary:hover { background: #6ee4ff; transform: scale(1.02); }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid #0cf;
+      color: #0cf;
+      font-weight: 600;
+      padding: 0.7rem 1.5rem;
+      border-radius: 60px;
+      cursor: pointer;
+    }
+    
+    /* ===== CHAT & AI ===== */
+    .chat-container, .ai-container {
+      background: #0f1822;
+      border-radius: 30px;
+      border: 1px solid #0cf5;
+      padding: 1.5rem;
+      height: 70vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .chat-messages, .ai-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    .chat-message, .ai-message {
+      background: #1a2533;
+      padding: 0.8rem 1.2rem;
+      border-radius: 20px;
+      max-width: 80%;
+      align-self: flex-start;
+      border-left: 4px solid #0cf;
+    }
+    .ai-message.user { align-self: flex-end; border-left: none; border-right: 4px solid #0cf; background: #0a2a3a; }
+    .meta { font-size: 0.7rem; opacity: 0.7; margin-bottom: 0.2rem; }
+    .chat-input-area, .ai-input-area {
+      display: flex;
+      gap: 10px;
+      margin-top: 1rem;
+    }
+    .chat-input-area input, .ai-input-area input {
+      flex: 1;
+      padding: 1rem;
+      background: #0b1119;
+      border: 1px solid #0cf6;
+      border-radius: 60px;
+      color: white;
+    }
+    
+    /* ===== ADMIN ===== */
+    .admin-section {
+      background: #0c1420;
+      border-radius: 24px;
+      padding: 1.8rem;
+      border: 1px solid #0cf;
+    }
+    .flex-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+    
+    /* ===== FOOTER ===== */
+    .contact-footer {
+      margin-top: 3rem;
+      text-align: center;
+      opacity: 0.7;
+      font-size: 0.9rem;
+      border-top: 1px solid #1e3a5a;
+      padding-top: 1.5rem;
+    }
+    
+    /* ===== TOAST ===== */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0cf;
+      color: #000;
+      padding: 0.8rem 1.5rem;
+      border-radius: 40px;
+      font-weight: 600;
+      box-shadow: 0 0 20px #0cf;
+      z-index: 9999;
+    }
+    
+    @media (max-width: 640px) {
+      .logo h1 { font-size: 1.5rem; }
+      .nav-btn { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <!-- ===== HEADER ===== -->
+  <header class="cyber-header">
+    <div class="logo">
+      <h1>SKYNET CYBER</h1>
+      <p>Fast • Reliable • Professional</p>
+    </div>
+    <div class="nav-links" id="navLinks">
+      <button class="nav-btn active" data-view="home"><i class="fas fa-home"></i> Home</button>
+      <button class="nav-btn" data-view="services"><i class="fas fa-cogs"></i> Services</button>
+      <button class="nav-btn" data-view="chat"><i class="fas fa-comments"></i> Community</button>
+      <button class="nav-btn" data-view="ai"><i class="fas fa-robot"></i> AI Assistant</button>
+      <button class="nav-btn" data-view="login" id="loginNavBtn"><i class="fas fa-sign-in-alt"></i> Login</button>
+      <button class="nav-btn admin-only" data-view="admin" style="display:none;" id="adminNavBtn"><i class="fas fa-shield-alt"></i> Admin</button>
+    </div>
+    <div class="auth-area" id="authArea">
+      <span id="userDisplay" class="user-badge"><i class="fas fa-user"></i> Guest</span>
+      <button class="nav-btn" id="logoutBtn" style="display:none;">Logout</button>
+    </div>
+  </header>
+
+  <!-- ===== MAIN VIEW ===== -->
+  <div id="viewContainer" class="view-container"></div>
+
+  <!-- ===== FOOTER ===== -->
+  <div class="contact-footer">
+    <p><i class="fas fa-phone"></i> 0716630443  |  <i class="fab fa-whatsapp"></i> 0713614441  |  <i class="fas fa-envelope"></i> skynetdigitol@gmail.com</p>
+    <p><i class="fas fa-map-marker-alt"></i> Opposite former Western Express Booking Office, along KAG Church</p>
+  </div>
+</div>
+
+<script>
+  (function(){
+    'use strict';
+
+    // ---------- STORAGE KEYS ----------
+    const STORAGE_SERVICES = 'skynet_services';
+    const STORAGE_CHAT = 'skynet_chat';
+    const STORAGE_USERS = 'skynet_users';
+    const STORAGE_AI_PREFIX = 'skynet_ai_'; // + email
+    
+    const ADMIN_EMAIL = 'admin@skynet.com';
+    const ADMIN_PASSWORD = 'admin123';
+
+    // ---------- GLOBAL STATE ----------
+    let currentUser = null;
+    let services = [];
+    let chatMessages = [];
+    let chatPollInterval = null;
+
+    // DOM elements
+    const viewContainer = document.getElementById('viewContainer');
+    const navBtns = document.querySelectorAll('.nav-btn[data-view]');
+    const loginNavBtn = document.getElementById('loginNavBtn');
+    const adminNavBtn = document.getElementById('adminNavBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const userDisplay = document.getElementById('userDisplay');
+
+    // ---------- AI KNOWLEDGE BASE (Massive) ----------
+    const aiKnowledge = {
+      greetings: ["Hello! I'm the Skynet Assistant. How can I help you today?", "Hi there! Ask me about our cyber services, computer issues, or government e‑services.", "Welcome to Skynet Cyber! What can I do for you?"],
+      cyber: {
+        printing: "We offer B&W and color printing at affordable rates. Bring your document in PDF/Word or email it to us.",
+        photocopy: "Photocopy services available up to A3 size. Bulk discounts offered.",
+        scanning: "High-resolution scanning (up to 600 DPI). We can email the scanned file directly to you.",
+        lamination: "We laminate IDs, certificates, and documents up to A3. Prices start from KSh 30.",
+        binding: "Spiral, comb, and thermal binding available. Ideal for reports and proposals.",
+        passport: "Instant passport photos that meet all embassy specifications. Soft copy also provided.",
+        typing: "Professional typing services at KSh 50 per page. We also format CVs and letters.",
+        internet: "High‑speed fiber internet. Browsing at KSh 1 per minute. We also have private booths."
+      },
+      government: {
+        kra: "We assist with KRA PIN registration, nil returns filing, and tax compliance certificates.",
+        nhif: "NHIF registration, monthly contributions, and SHA updates done here.",
+        nssf: "NSSF member registration, contributions, and statement inquiries.",
+        helb: "HELB loan applications (first time and subsequent). We also guide on repayment.",
+        etims: "E‑TIMS registration and setup for businesses. Required for VAT compliance.",
+        payslips: "We generate professional payslips (PDF/printed) for employees. KSh 100 per payslip."
+      },
+      ecitizen: {
+        id: "Assistance with ID application (new/replacement) and tracking.",
+        passport: "ePassport application, photo capture, and appointment booking.",
+        driving: "NTSA driving license renewal and new applications.",
+        goodconduct: "Certificate of Good Conduct application (police clearance).",
+        business: "Business name registration and search on eCitizen.",
+        vehicle: "NTSA vehicle transfer services (logbook change of ownership)."
+      },
+      education: {
+        cbc: "We assist with CBC assessments, printing learning materials, and uploading results.",
+        examprinting: "Secure exam printing for schools. Bulk discounts available.",
+        knec: "KNEC registration for KCPE, KCSE, and technical exams. Results slip printing.",
+        onlinelearning: "We help set up Zoom, Google Classroom, and other e‑learning platforms.",
+        virtualclasses: "High‑speed internet for attending virtual classes. Headphones provided.",
+        research: "Assistance with online research and academic writing support."
+      },
+      tech: {
+        website: "We create modern, responsive websites for businesses and personal brands.",
+        app: "Custom mobile app development (Android). Get a free consultation.",
+        consultancy: "IT consultancy for small businesses – networking, software, and security.",
+        repairs: "Basic computer troubleshooting and software installation.",
+        design: "Graphic design: flyers, posters, wedding cards, eulogies."
+      },
+      pricing: "Prices vary by service. Please visit our café or call for a detailed quote. We're affordable!",
+      location: "We're opposite the former Western Express Booking Office, along KAG Church.",
+      hours: "Mon–Sat: 7:00 AM – 9:00 PM. Sun: 10:00 AM – 6:00 PM.",
+      contact: "Call 0716630443 or WhatsApp 0713614441. Email: skynetdigitol@gmail.com.",
+      fallback: "I'm not sure about that. Please ask about our cyber services, government e‑services, or tech support."
+    };
+
+    // ---------- INITIALIZE DEFAULT DATA ----------
+    function initData() {
+      // Services (expanded education)
+      const stored = localStorage.getItem(STORAGE_SERVICES);
+      if (stored) {
+        services = JSON.parse(stored);
+      } else {
+        services = [
+          // Cyber
+          { id: '1', name: 'Internet Browsing', category: '💻 Cyber Services', description: 'High-speed fiber internet' },
+          { id: '2', name: 'Printing (B&W/Color)', category: '💻 Cyber Services', description: 'Quality prints from KSh 10/page' },
+          { id: '3', name: 'Photocopy', category: '💻 Cyber Services', description: 'Clear copies up to A3' },
+          { id: '4', name: 'Scanning', category: '💻 Cyber Services', description: 'Scan to email/USB' },
+          { id: '5', name: 'Lamination', category: '💻 Cyber Services', description: 'ID & document lamination' },
+          { id: '6', name: 'Binding', category: '💻 Cyber Services', description: 'Spiral/comb binding' },
+          { id: '7', name: 'Passport Photos', category: '💻 Cyber Services', description: 'Instant 6 copies' },
+          { id: '8', name: 'Typing Services', category: '💻 Cyber Services', description: 'CV, letters, forms' },
+          // Government
+          { id: '9', name: 'KRA Returns', category: '🏛️ Government Services', description: 'PIN & nil returns' },
+          { id: '10', name: 'NHIF / SHA', category: '🏛️ Government Services', description: 'Registration & updates' },
+          { id: '11', name: 'NSSF', category: '🏛️ Government Services', description: 'Member services' },
+          { id: '12', name: 'HELB Applications', category: '🏛️ Government Services', description: 'Loan application' },
+          { id: '13', name: 'E-TIMS Registration', category: '🏛️ Government Services', description: 'Tax invoicing setup' },
+          { id: '14', name: 'Payslips Processing', category: '🏛️ Government Services', description: 'PDF payslips' },
+          // eCitizen
+          { id: '15', name: 'ID Application', category: '📄 eCitizen Services', description: 'New / replacement' },
+          { id: '16', name: 'Passport Application', category: '📄 eCitizen Services', description: 'ePassport assistance' },
+          { id: '17', name: 'Driving License', category: '📄 eCitizen Services', description: 'NTSA services' },
+          { id: '18', name: 'Good Conduct', category: '📄 eCitizen Services', description: 'Police clearance' },
+          { id: '19', name: 'Business Registration', category: '📄 eCitizen Services', description: 'Sole proprietorship' },
+          { id: '20', name: 'Vehicle Transfer', category: '📄 eCitizen Services', description: 'Logbook change' },
+          // Education (expanded)
+          { id: '21', name: 'CBC Assessments', category: '🎓 Education Services', description: 'Printing & uploading' },
+          { id: '22', name: 'KNEC Registration', category: '🎓 Education Services', description: 'KCPE/KCSE exams' },
+          { id: '23', name: 'Exam Printing', category: '🎓 Education Services', description: 'Secure bulk printing' },
+          { id: '24', name: 'Virtual Classes Setup', category: '🎓 Education Services', description: 'Zoom/Google Meet' },
+          { id: '25', name: 'E‑Learning Assistance', category: '🎓 Education Services', description: 'Platform navigation' },
+          { id: '26', name: 'Research Support', category: '🎓 Education Services', description: 'Online research' },
+          { id: '27', name: 'KUCCPS Application', category: '🎓 Education Services', description: 'Course selection' },
+          { id: '28', name: 'HELB Subsequent', category: '🎓 Education Services', description: 'Loan renewal' },
+          // Graphic Design
+          { id: '29', name: 'Flyers & Posters', category: '🎨 Graphic Design', description: 'Custom designs' },
+          { id: '30', name: 'Wedding Cards', category: '🎨 Graphic Design', description: 'Elegant designs' },
+          // Tech
+          { id: '31', name: 'Website Creation', category: '🚀 Tech Services', description: 'Business websites' },
+          { id: '32', name: 'App Development', category: '🚀 Tech Services', description: 'Android apps' },
+          { id: '33', name: 'IT Consultancy', category: '🚀 Tech Services', description: 'Expert advice' }
+        ];
+        saveServices();
+      }
+
+      // Chat
+      const storedChat = localStorage.getItem(STORAGE_CHAT);
+      if (storedChat) {
+        chatMessages = JSON.parse(storedChat);
+      } else {
+        chatMessages = [
+          { id: '0', user: 'System', text: '👋 Welcome to Skynet Community Chat! Be respectful.', timestamp: new Date().toISOString() }
+        ];
+        saveChat();
+      }
+
+      // Users
+      if (!localStorage.getItem(STORAGE_USERS)) {
+        localStorage.setItem(STORAGE_USERS, JSON.stringify([{ email: ADMIN_EMAIL, password: ADMIN_PASSWORD }]));
+      }
+    }
+
+    function saveServices() { localStorage.setItem(STORAGE_SERVICES, JSON.stringify(services)); }
+    function saveChat() { localStorage.setItem(STORAGE_CHAT, JSON.stringify(chatMessages)); }
+
+    // ---------- TOAST ----------
+    function toast(msg) {
+      const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
+      document.body.appendChild(t); setTimeout(() => t.remove(), 3000);
+    }
+
+    // ---------- RENDER VIEW ----------
+    function renderView(view) {
+      navBtns.forEach(b => b.classList.remove('active'));
+      document.querySelector(`[data-view="${view}"]`)?.classList.add('active');
+      
+      switch(view) {
+        case 'home': viewContainer.innerHTML = homeHTML(); break;
+        case 'services': viewContainer.innerHTML = servicesHTML(); attachServiceClick(); break;
+        case 'login': viewContainer.innerHTML = loginHTML(); attachLoginEvents(); break;
+        case 'admin': 
+          if (currentUser?.isAdmin) { viewContainer.innerHTML = adminPanelHTML(); renderAdminList(); attachAdminEvents(); }
+          else viewContainer.innerHTML = '<h2 style="text-align:center;margin-top:3rem;">🔒 Admin Only</h2>'; break;
+        case 'chat': viewContainer.innerHTML = chatHTML(); initChat(); break;
+        case 'ai': viewContainer.innerHTML = aiHTML(); initAI(); break;
+        default: viewContainer.innerHTML = homeHTML();
+      }
+    }
+
+    // ---------- HOME ----------
+    function homeHTML() {
+      return `
+        <div style="text-align:center;padding:2rem 0;">
+          <h2 style="font-size:2.5rem;font-weight:800;text-shadow:0 0 20px #0cf;">Fast, Reliable & Professional</h2>
+          <p style="font-size:1.2rem;margin:1rem 0 2rem;">Your one‑stop digital hub in the heart of the city.</p>
+          <div style="display:flex;gap:1rem;justify-content:center;">
+            <button class="btn-primary" style="width:auto;padding:1rem 2.5rem;" onclick="document.querySelector('[data-view=\\'services\\']').click()">View Services</button>
+            ${!currentUser ? '<button class="btn-outline" onclick="document.querySelector(\'[data-view=\\'login\\']\').click()">Login / Sign Up</button>' : ''}
+          </div>
+          <div style="margin-top:3rem;background:#0f1a26;border-radius:40px;padding:2rem;border:1px solid #0cf5;">
+            <h3><i class="fas fa-clock"></i> Working Hours</h3>
+            <p>Mon - Sat: 7:00 AM - 9:00 PM | Sun: 10:00 AM - 6:00 PM</p>
+          </div>
+        </div>
+      `;
+    }
+
+    // ---------- SERVICES ----------
+    function servicesHTML() {
+      let grouped = {};
+      services.forEach(s => { if(!grouped[s.category]) grouped[s.category] = []; grouped[s.category].push(s); });
+      let html = `<h2 class="section-title"><i class="fas fa-cogs"></i> Our Services</h2>`;
+      for (let cat in grouped) {
+        html += `<h3 style="margin:1.5rem 0 1rem;color:#a0e0ff;">${cat}</h3><div class="card-grid">`;
+        grouped[cat].forEach(svc => {
+          html += `<div class="service-card" data-id="${svc.id}" data-name="${svc.name}" data-desc="${svc.description || ''}">
+            ${svc.imageUrl ? `<img src="${svc.imageUrl}" alt="${svc.name}">` : '<i class="fas fa-microchip"></i>'}
+            <h4>${svc.name}</h4>
+            <span class="category-badge">${svc.category}</span>
+          </div>`;
+        });
+        html += '</div>';
+      }
+      return html;
+    }
+    function attachServiceClick() {
+      document.querySelectorAll('.service-card').forEach(c => c.addEventListener('click', ()=> alert(`${c.dataset.name}\n${c.dataset.desc}`)));
+    }
+
+    // ---------- AUTH ----------
+    function loginHTML() {
+      return `
+        <div class="form-card">
+          <h2 style="text-align:center;margin-bottom:1.5rem;"><i class="fas fa-user-lock"></i> Login / Sign Up</h2>
+          <div id="authToggle" style="display:flex;gap:0.5rem;margin-bottom:1.5rem;">
+            <button class="nav-btn active" id="showLogin">Login</button>
+            <button class="nav-btn" id="showSignup">Sign Up</button>
+          </div>
+          <form id="authForm">
+            <div class="input-group"><label>Email</label><input type="email" id="authEmail" required></div>
+            <div class="input-group"><label>Password</label><input type="password" id="authPassword" required minlength="4"></div>
+            <button type="submit" class="btn-primary" id="authSubmitBtn">Login</button>
+          </form>
+          <p id="authError" style="color:#ff7b7b;margin-top:1rem;"></p>
+        </div>
+      `;
+    }
+    function attachLoginEvents() {
+      let mode = 'login';
+      const showLogin = document.getElementById('showLogin'), showSignup = document.getElementById('showSignup');
+      const form = document.getElementById('authForm'), submitBtn = document.getElementById('authSubmitBtn'), err = document.getElementById('authError');
+      showLogin?.addEventListener('click', ()=> { mode='login'; submitBtn.textContent='Login'; showLogin.classList.add('active'); showSignup.classList.remove('active'); });
+      showSignup?.addEventListener('click', ()=> { mode='signup'; submitBtn.textContent='Sign Up'; showSignup.classList.add('active'); showLogin.classList.remove('active'); });
+      form?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('authEmail').value.trim(), pass = document.getElementById('authPassword').value;
+        const users = JSON.parse(localStorage.getItem(STORAGE_USERS)) || [];
+        if (mode === 'signup') {
+          if (users.find(u => u.email === email)) { err.textContent = 'Email exists.'; return; }
+          users.push({ email, password: pass });
+          localStorage.setItem(STORAGE_USERS, JSON.stringify(users));
+          currentUser = { email, isAdmin: email === ADMIN_EMAIL };
+          updateAuthUI(); toast('Account created!'); renderView('home');
+        } else {
+          const user = users.find(u => u.email === email && u.password === pass);
+          if (user) { currentUser = { email: user.email, isAdmin: user.email === ADMIN_EMAIL }; updateAuthUI(); toast('Logged in'); renderView('home'); }
+          else err.textContent = 'Invalid credentials.';
+        }
+      });
+    }
+
+    // ---------- COMMUNITY CHAT (Real‑time polling) ----------
+    function chatHTML() {
+      return `
+        <div class="chat-container">
+          <h3><i class="fas fa-globe"></i> Community Chat</h3>
+          <div id="chatMessages" class="chat-messages">Loading...</div>
+          ${currentUser ? `
+          <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Type a message...">
+            <button class="btn-primary" id="sendChatBtn" style="width:auto;"><i class="fas fa-paper-plane"></i></button>
+          </div>` : '<p style="margin-top:1rem;">Please login to chat.</p>'}
+        </div>
+      `;
+    }
+    function initChat() {
+      if (!currentUser) return;
+      const messagesDiv = document.getElementById('chatMessages');
+      const input = document.getElementById('chatInput'), sendBtn = document.getElementById('sendChatBtn');
+      
+      function renderChat() {
+        const msgs = JSON.parse(localStorage.getItem(STORAGE_CHAT)) || [];
+        let html = '';
+        msgs.slice(-50).forEach(m => {
+          const time = m.timestamp ? new Date(m.timestamp).toLocaleTimeString() : '';
+          html += `<div class="chat-message"><div class="meta">${m.user} • ${time}</div>${m.text}</div>`;
+        });
+        messagesDiv.innerHTML = html || '<p>No messages.</p>';
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }
+      renderChat();
+      
+      // Poll for new messages every 2 seconds (simulate real‑time)
+      if (chatPollInterval) clearInterval(chatPollInterval);
+      chatPollInterval = setInterval(() => {
+        if (viewContainer.querySelector('#chatMessages')) renderChat();
+      }, 2000);
+      
+      const send = () => {
+        const text = input.value.trim(); if (!text) return;
+        const msgs = JSON.parse(localStorage.getItem(STORAGE_CHAT)) || [];
+        const newMsg = { id: Date.now() + Math.random(), user: currentUser.email.split('@')[0], text, timestamp: new Date().toISOString() };
+        msgs.push(newMsg);
+        if (msgs.length > 100) msgs.shift();
+        localStorage.setItem(STORAGE_CHAT, JSON.stringify(msgs));
+        renderChat();
+        input.value = '';
+      };
+      sendBtn?.addEventListener('click', send);
+      input?.addEventListener('keypress', e => { if(e.key==='Enter') send(); });
+    }
+
+    // ---------- AI ASSISTANT (Private) ----------
+    function aiHTML() {
+      return `
+        <div class="ai-container">
+          <h3><i class="fas fa-robot"></i> Skynet Assistant</h3>
+          <div id="aiMessages" class="ai-messages">👋 Hello! I'm your cyber café expert. Ask me anything.</div>
+          ${currentUser ? `
+          <div class="ai-input-area">
+            <input type="text" id="aiInput" placeholder="e.g., How much is printing?">
+            <button class="btn-primary" id="sendAiBtn" style="width:auto;"><i class="fas fa-paper-plane"></i></button>
+          </div>` : '<p style="margin-top:1rem;">Please login to use the AI.</p>'}
+        </div>
+      `;
+    }
+    function initAI() {
+      if (!currentUser) return;
+      const messagesDiv = document.getElementById('aiMessages');
+      const input = document.getElementById('aiInput'), sendBtn = document.getElementById('sendAiBtn');
+      const storageKey = STORAGE_AI_PREFIX + currentUser.email;
+      
+      function loadAIHistory() {
+        const stored = localStorage.getItem(storageKey);
+        if (stored) {
+          const history = JSON.parse(stored);
+          let html = '';
+          history.forEach(m => {
+            html += `<div class="ai-message ${m.sender}"><div class="meta">${m.sender === 'user' ? 'You' : 'AI'}</div>${m.text}</div>`;
+          });
+          messagesDiv.innerHTML = html;
+        } else {
+          messagesDiv.innerHTML = `<div class="ai-message ai"><div class="meta">AI</div>${aiKnowledge.greetings[0]}</div>`;
+        }
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }
+      loadAIHistory();
+      
+      function generateAIResponse(query) {
+        const q = query.toLowerCase();
+        if (q.includes('print')) return aiKnowledge.cyber.printing;
+        if (q.includes('photocopy')) return aiKnowledge.cyber.photocopy;
+        if (q.includes('scan')) return aiKnowledge.cyber.scanning;
+        if (q.includes('laminate')) return aiKnowledge.cyber.lamination;
+        if (q.includes('bind')) return aiKnowledge.cyber.binding;
+        if (q.includes('passport') || q.includes('photo')) return aiKnowledge.cyber.passport;
+        if (q.includes('type') || q.includes('cv')) return aiKnowledge.cyber.typing;
+        if (q.includes('kra')) return aiKnowledge.government.kra;
+        if (q.includes('nhif') || q.includes('sha')) return aiKnowledge.government.nhif;
+        if (q.includes('nssf')) return aiKnowledge.government.nssf;
+        if (q.includes('helb')) return aiKnowledge.government.helb;
+        if (q.includes('etims')) return aiKnowledge.government.etims;
+        if (q.includes('payslip')) return aiKnowledge.government.payslips;
+        if (q.includes('id')) return aiKnowledge.ecitizen.id;
+        if (q.includes('driving')) return aiKnowledge.ecitizen.driving;
+        if (q.includes('good conduct')) return aiKnowledge.ecitizen.goodconduct;
+        if (q.includes('business')) return aiKnowledge.ecitizen.business;
+        if (q.includes('vehicle')) return aiKnowledge.ecitizen.vehicle;
+        if (q.includes('cbc')) return aiKnowledge.education.cbc;
+        if (q.includes('exam')) return aiKnowledge.education.examprinting;
+        if (q.includes('knec')) return aiKnowledge.education.knec;
+        if (q.includes('virtual') || q.includes('zoom')) return aiKnowledge.education.virtualclasses;
+        if (q.includes('online') || q.includes('elearning')) return aiKnowledge.education.onlinelearning;
+        if (q.includes('website')) return aiKnowledge.tech.website;
+        if (q.includes('app')) return aiKnowledge.tech.app;
+        if (q.includes('consult')) return aiKnowledge.tech.consultancy;
+        if (q.includes('repair')) return aiKnowledge.tech.repairs;
+        if (q.includes('design')) return aiKnowledge.tech.design;
+        if (q.includes('price') || q.includes('cost') || q.includes('how much')) return aiKnowledge.pricing;
+        if (q.includes('location') || q.includes('where')) return aiKnowledge.location;
+        if (q.includes('hour') || q.includes('time') || q.includes('open')) return aiKnowledge.hours;
+        if (q.includes('contact') || q.includes('phone') || q.includes('whatsapp')) return aiKnowledge.contact;
+        if (q.includes('hello') || q.includes('hi')) return aiKnowledge.greetings[Math.floor(Math.random()*aiKnowledge.greetings.length)];
+        return aiKnowledge.fallback;
+      }
+      
+      async function sendMessage() {
+        const text = input.value.trim(); if (!text) return;
+        const history = JSON.parse(localStorage.getItem(storageKey)) || [];
+        history.push({ sender: 'user', text, timestamp: new Date().toISOString() });
+        const aiReply = generateAIResponse(text);
+        history.push({ sender: 'ai', text: aiReply, timestamp: new Date().toISOString() });
+        localStorage.setItem(storageKey, JSON.stringify(history));
+        loadAIHistory();
+        input.value = '';
+      }
+      
+      sendBtn?.addEventListener('click', sendMessage);
+      input?.addEventListener('keypress', e => { if(e.key==='Enter') sendMessage(); });
+    }
+
+    // ---------- ADMIN PANEL ----------
+    function adminPanelHTML() {
+      return `
+        <div class="admin-section">
+          <h2><i class="fas fa-shield"></i> Admin Dashboard</h2>
+          <div style="margin:2rem 0;">
+            <h3>Add New Service</h3>
+            <form id="addServiceForm">
+              <div class="flex-row">
+                <div class="input-group"><input placeholder="Service Name" id="svcName" required></div>
+                <div class="input-group"><input placeholder="Category" id="svcCat" required list="catList"></div>
+                <datalist id="catList">
+                  <option>💻 Cyber Services</option><option>🏛️ Government Services</option><option>📄 eCitizen Services</option>
+                  <option>🎓 Education Services</option><option>🎨 Graphic Design</option><option>🚀 Tech Services</option>
+                </datalist>
+              </div>
+              <div class="input-group"><textarea placeholder="Description" id="svcDesc" rows="2"></textarea></div>
+              <div class="input-group"><label>Image (optional)</label><input type="file" id="svcImage" accept="image/*"></div>
+              <button type="submit" class="btn-primary">Add Service</button>
+            </form>
+          </div>
+          <hr style="border-color:#0cf3;margin:2rem 0;">
+          <h3>Manage Services</h3>
+          <div id="adminServiceList"></div>
+        </div>
+      `;
+    }
+    function renderAdminList() {
+      const listDiv = document.getElementById('adminServiceList');
+      let html = '';
+      services.forEach(s => {
+        html += `<div style="background:#1a2533;padding:0.8rem;border-radius:20px;margin-bottom:0.5rem;display:flex;justify-content:space-between;">
+          <span><strong>${s.name}</strong> (${s.category})</span>
+          <button class="nav-btn delete-service" data-id="${s.id}" style="color:#ff8080;"><i class="fas fa-trash"></i></button>
+        </div>`;
+      });
+      listDiv.innerHTML = html || '<p>No services.</p>';
+      document.querySelectorAll('.delete-service').forEach(b => b.addEventListener('click', (e) => {
+        const id = b.dataset.id;
+        services = services.filter(s => s.id !== id);
+        saveServices();
+        renderAdminList();
+        toast('Service deleted');
+      }));
+    }
+    function attachAdminEvents() {
+      const form = document.getElementById('addServiceForm');
+      form?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('svcName').value.trim();
+        const cat = document.getElementById('svcCat').value.trim();
+        const desc = document.getElementById('svcDesc').value.trim();
+        const file = document.getElementById('svcImage').files[0];
+        const addService = (img) => {
+          services.push({ id: Date.now().toString(), name, category: cat, description: desc, imageUrl: img || '' });
+          saveServices();
+          renderAdminList();
+          form.reset();
+          toast('Service added! Visible to all.');
+        };
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (ev) => addService(ev.target.result);
+          reader.readAsDataURL(file);
+        } else addService('');
+      });
+    }
+
+    // ---------- AUTH UI ----------
+    function updateAuthUI() {
+      if (currentUser) {
+        userDisplay.innerHTML = `<i class="fas fa-user"></i> ${currentUser.email}`;
+        loginNavBtn.style.display = 'none';
+        logoutBtn.style.display = 'inline-block';
+        adminNavBtn.style.display = currentUser.isAdmin ? 'inline-block' : 'none';
+      } else {
+        userDisplay.innerHTML = '<i class="fas fa-user"></i> Guest';
+        loginNavBtn.style.display = 'inline-block';
+        logoutBtn.style.display = 'none';
+        adminNavBtn.style.display = 'none';
+      }
+    }
+
+    // ---------- LOGOUT & CLEANUP ----------
+    logoutBtn.addEventListener('click', () => {
+      currentUser = null;
+      updateAuthUI();
+      if (chatPollInterval) clearInterval(chatPollInterval);
+      renderView('home');
+      toast('Logged out');
+    });
+
+    // ---------- NAVIGATION ----------
+    navBtns.forEach(btn => btn.addEventListener('click', (e) => {
+      const view = btn.dataset.view;
+      if (view === 'admin' && (!currentUser || !currentUser.isAdmin)) { toast('Admin login required'); renderView('login'); return; }
+      if ((view === 'chat' || view === 'ai') && !currentUser) { toast('Please login'); renderView('login'); return; }
+      renderView(view);
+    }));
+
+    // ---------- INITIALIZE ----------
+    initData();
+    updateAuthUI();
+    renderView('home');
+    
+    // Clean up polling on page unload
+    window.addEventListener('beforeunload', () => { if (chatPollInterval) clearInterval(chatPollInterval); });
+  })();
+</script>
+</body>
+</html>
