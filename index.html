@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>SKYNET CYBER SHIANDA • Premium Digital Hub</title>
+    <meta name="description" content="KRA, eCitizen, CBC education, creative design & cyber services. Official payment: Paybill 714888 Acc 467108. 24/7 support: 0713614441">
+    <meta name="theme-color" content="#0066cc">
+    <meta property="og:title" content="SKYNET CYBER SHIANDA • Professional Services">
+    <meta property="og:description" content="Statutory, eCitizen, Education, Creative, Cyber & Business – All in One Hub.">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230066cc'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-family='Arial'%3E⚡%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+    
+    <!-- Three.js & Firebase -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+        import { getDatabase, ref, set, onValue, push, remove } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyDlRX0V6zKPKBtZ5FkUQkLwKRHDtZ_V3UQ",
+            authDomain: "skynet-cyber-shianda.firebaseapp.com",
+            databaseURL: "https://skynet-cyber-shianda-default-rtdb.firebaseio.com",
+            projectId: "skynet-cyber-shianda",
+            storageBucket: "skynet-cyber-shianda.appspot.com",
+            messagingSenderId: "528153694987",
+            appId: "1:528153694987:web:9a7b1f1f1f1f1f1f1f1f1f"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        window.db = database;
+
+        window.syncTopics = (callback) => onValue(ref(database, 'topics'), (snap) => callback(snap.val() || {}));
+        window.addTopicToCloud = (title, desc) => set(push(ref(database, 'topics')), { title, desc });
+        window.deleteTopicFromCloud = (id) => remove(ref(database, `topics/${id}`));
+        window.syncMedia = (callback) => onValue(ref(database, 'media'), (snap) => callback(snap.val() || {}));
+        window.addMediaToCloud = (type, data) => set(push(ref(database, 'media')), { type, data });
+        window.deleteMediaFromCloud = (id) => remove(ref(database, `media/${id}`));
+    </script>
+
+    <style>
+        :root { --neon: #0066cc; --gold: #d4af37; --text: #1a1a1a; --card-bg: rgba(255, 255, 255, 0.85); }
+        * { box-sizing: border-box; margin: 0; }
+        body, html { 
+            margin: 0; padding: 0; background: linear-gradient(145deg, #ffffff 0%, #d9ebff 100%); 
+            color: var(--text); font-family: 'Segoe UI', 'Roboto', sans-serif; overflow-x: hidden; min-height: 100vh;
+        }
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.5; pointer-events: none; }
+        .container { width: 94%; max-width: 1400px; margin: 0 auto; padding: 15px 0 30px; }
+        header { text-align: center; margin-bottom: 20px; padding-top: 15px; }
+        h1 { font-size: clamp(2.2rem, 10vw, 4.5rem); letter-spacing: 4px; text-shadow: 0 0 15px rgba(0,102,204,0.2); margin: 0; font-weight: 900; color: #002b54; }
+        .subtitle { font-size: 0.9rem; color: #1e3a5f; letter-spacing: 3px; font-weight: 600; text-transform: uppercase; }
+        .pay-card {
+            background: rgba(255,255,255,0.8); backdrop-filter: blur(8px); border: 2px solid var(--gold);
+            padding: 20px; border-radius: 32px; margin-bottom: 30px; text-align: center; box-shadow: 0 15px 30px rgba(212,175,55,0.15);
+        }
+        .pay-detail { 
+            font-family: monospace; font-size: 1.2rem; color: #1e2f4b; background: rgba(212,175,55,0.08); 
+            padding: 12px 18px; border-radius: 60px; display: inline-block; margin: 8px 6px; border: 1px solid var(--gold); font-weight: 600;
+        }
+        #admin-panel { background: rgba(255,255,255,0.7); backdrop-filter: blur(8px); border: 1px solid rgba(0,102,204,0.2); padding: 22px; border-radius: 28px; margin-bottom: 28px; }
+        .admin-content { display: none; margin-top: 20px; border-top: 2px solid var(--neon); padding-top: 25px; }
+        .admin-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .admin-tab { padding: 10px 20px; background: rgba(0,102,204,0.1); border-radius: 30px; cursor: pointer; font-weight: 600; }
+        .admin-tab.active { background: var(--neon); color: white; }
+        .admin-pane { display: none; }
+        .admin-pane.active { display: block; }
+        .admin-input { background: #fff; border: 1.5px solid #cddae6; padding: 14px 16px; border-radius: 40px; width: 100%; max-width: 340px; margin-bottom: 12px; font-size: 1rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .card { 
+            background: var(--card-bg); backdrop-filter: blur(4px); border: 1px solid rgba(0,102,204,0.15); 
+            padding: 24px 20px; border-radius: 30px; box-shadow: 0 10px 20px rgba(0,35,70,0.05); transition: 0.25s; position: relative;
+        }
+        .card:hover { border-color: var(--neon); transform: translateY(-6px); box-shadow: 0 18px 30px rgba(0,102,204,0.12); background: rgba(255,255,255,0.95); }
+        .card h3 { color: #003366; text-transform: uppercase; font-size: 1rem; border-bottom: 2px solid rgba(0,102,204,0.2); padding-bottom: 12px; }
+        .card ul { list-style: none; padding: 0; font-size: 0.85rem; line-height: 1.8; color: #1e2f3e; columns: 1; }
+        @media (min-width: 600px) { .card ul { columns: 2; column-gap: 20px; } }
+        .card li { break-inside: avoid; }
+        .card li::before { content: "▹▹"; color: var(--neon); font-weight: bold; margin-right: 8px; }
+        .admin-delete-btn { display: none; position: absolute; top: 14px; right: 14px; background: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 30px; font-size: 0.7rem; font-weight: bold; cursor: pointer; z-index: 5; }
+        #terminal { background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); border: 1px solid rgba(0,102,204,0.2); height: 420px; border-radius: 32px; display: flex; flex-direction: column; overflow: hidden; margin-top: 35px; }
+        #stream { flex: 1; padding: 20px; overflow-y: auto; font-family: monospace; font-size: 0.95rem; color: #103c5c; background: rgba(255,255,255,0.3); }
+        .input-bar { display: flex; border-top: 1px solid #bdd3e8; background: #fff; }
+        .input-bar input { flex: 1; background: transparent; border: none; padding: 20px; outline: none; font-size: 1rem; }
+        .btn-run { background: #004a99; color: white; border: none; padding: 0 30px; font-weight: bold; text-transform: uppercase; letter-spacing: 1.5px; border-radius: 0 30px 30px 0; cursor: pointer; }
+        #whatsapp-trigger { position: fixed; bottom: 25px; left: 25px; background: #25d366; color: white; padding: 14px 28px; border-radius: 60px; font-weight: 700; cursor: pointer; z-index: 4000; box-shadow: 0 8px 20px rgba(37,211,102,0.35); border: none; font-size: 1.1rem; display: flex; align-items: center; }
+        #community-icon { position: fixed; bottom: 25px; right: 25px; background: #0066cc; color: white; width: 60px; height: 60px; border-radius: 30px; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 8px 20px rgba(0,102,204,0.4); cursor: pointer; z-index: 4500; border: 2px solid white; }
+        #community-panel { position: fixed; bottom: 100px; right: 25px; width: 360px; max-width: 90vw; background: rgba(255,255,255,0.97); backdrop-filter: blur(16px); border-radius: 32px; box-shadow: 0 25px 40px rgba(0,0,0,0.15); border: 1px solid rgba(0,102,204,0.25); z-index: 4600; display: none; flex-direction: column; max-height: 550px; }
+        .community-header { padding: 16px 20px; background: #e6f2ff; border-bottom: 1px solid #cce0ff; display: flex; justify-content: space-between; font-weight: 700; color: #002b54; }
+        .community-messages { flex: 1; padding: 16px; overflow-y: auto; max-height: 320px; background: rgba(255,255,255,0.6); font-size: 0.9rem; }
+        .msg-bubble { background: white; padding: 10px 14px; border-radius: 20px 20px 20px 4px; margin-bottom: 12px; border: 1px solid #e0ecf9; word-break: break-word; }
+        .community-input-area { display: flex; padding: 12px; border-top: 1px solid #cce0ff; background: #fff; }
+        .community-input-area input { flex: 1; padding: 14px; border: 1.5px solid #cddae6; border-radius: 40px; outline: none; }
+        .community-input-area button { background: #0066cc; color: white; border: none; border-radius: 40px; padding: 0 20px; margin-left: 8px; font-weight: bold; cursor: pointer; }
+        #media-display { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 18px; margin-top: 30px; }
+        .media-container { position: relative; border: 1px solid rgba(0,102,204,0.2); border-radius: 24px; overflow: hidden; background: #fff; }
+        .media-container img, .media-container video { width: 100%; height: auto; display: block; border-radius: 24px; }
+        .contact-footer { margin-top: 40px; text-align: center; font-weight: 600; color: #003366; }
+        .sync-badge { display: inline-block; background: #28a745; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; margin-left: 10px; }
+        @media (max-width: 600px) {
+            .pay-detail { font-size: 1rem; padding: 8px 12px; }
+            #whatsapp-trigger { padding: 12px 20px; font-size: 1rem; bottom: 15px; left: 15px; }
+            #community-icon { width: 55px; height: 55px; bottom: 15px; right: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="container">
+        <header>
+            <h1>SKYNET CYBER SHIANDA</h1>
+            <div class="subtitle">⚡ SECURITY • EDUCATION • STATUTORY • CREATIVE • BUSINESS • LEGAL ⚡</div>
+        </header>
+
+        <!-- Payment Hub -->
+        <section class="pay-card">
+            <h2 style="color:#7a5c1a; margin-bottom:10px;">💠 OFFICIAL PAYMENT CHANNEL 💠</h2>
+            <div class="pay-detail">🏦 LOOP BIZ ACCOUNT</div><br>
+            <div class="pay-detail">📲 PAYBILL: <b>714888</b></div>
+            <div class="pay-detail">🔢 ACCOUNT: <b>467108</b></div>
+        </section>
+
+        <!-- Admin Panel (same as before) -->
+        <section id="admin-panel">
+            <div id="login-form">
+                <input type="password" id="admPass" class="admin-input" placeholder="🔐 Authorization Key">
+                <button onclick="unlockAdmin()" class="btn-run" style="padding: 14px 30px; border-radius: 40px; background: #1a3e60;">AUTHORIZE</button>
+            </div>
+            <div id="admin-tools" class="admin-content">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap;">
+                    <h3 style="color:#003d66;">🛡️ SYSTEM OVERRIDE ACTIVE <span id="sync-status" class="sync-badge">● SYNC LIVE</span></h3>
+                    <button onclick="lockAdmin()" style="background:#b02a37; color:white; border:none; padding:10px 20px; border-radius:40px; cursor:pointer; font-weight:bold;">🔒 EXIT & LOCK</button>
+                </div>
+                <div class="admin-tabs">
+                    <div class="admin-tab active" onclick="switchAdminTab('topics')">📋 Topics</div>
+                    <div class="admin-tab" onclick="switchAdminTab('media')">🖼️ Media</div>
+                    <div class="admin-tab" onclick="switchAdminTab('stats')">📊 Stats</div>
+                </div>
+                <div id="pane-topics" class="admin-pane active">
+                    <div class="grid">
+                        <div class="card">
+                            <p style="font-weight:700;">➕ Add New Topic/Program:</p>
+                            <input type="text" id="topicTitle" class="admin-input" placeholder="e.g., NEMIS Registration">
+                            <input type="text" id="topicDesc" class="admin-input" placeholder="Detailed description ...">
+                            <button onclick="addTopic()" class="btn-run" style="width:100%; border-radius:40px; padding:14px;">🚀 DEPLOY TOPIC</button>
+                        </div>
+                        <div class="card">
+                            <p style="font-weight:700;">📌 Manage Existing Topics</p>
+                            <p style="font-size:0.9rem;">Click DELETE on any topic card below. Changes sync globally.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="pane-media" class="admin-pane">
+                    <div class="grid">
+                        <div class="card">
+                            <p style="font-weight:700;">🖼️ Master Media Upload:</p>
+                            <input type="file" id="mediaInput" class="admin-input" accept="image/*,video/*" multiple>
+                            <button onclick="uploadMedia()" class="btn-run" style="width:100%; border-radius:40px; padding:14px;">📤 UPLOAD TO GALLERY</button>
+                        </div>
+                        <div class="card">
+                            <p style="font-weight:700;">🗑️ Manage Media</p>
+                            <p style="font-size:0.9rem;">Use DELETE button on each media item.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="pane-stats" class="admin-pane">
+                    <div class="card">
+                        <h3>Cloud Statistics</h3>
+                        <p>📋 Topics: <span id="topic-count">0</span></p>
+                        <p>🖼️ Media items: <span id="media-count">0</span></p>
+                        <p>💬 Community messages (local): <span id="community-count">0</span></p>
+                        <p style="margin-top:15px;"><i>All data is synced in real‑time across all visitors.</i></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== MASSIVE SERVICES GRID (EXPANDED) ========== -->
+        <div class="grid" id="main-grid">
+            <!-- 1. KRA & Statutory (expanded) -->
+            <div class="card"><h3>🏛️ KRA & STATUTORY</h3><ul>
+                <li>Individual Returns (ITR)</li><li>Company Returns (CIT)</li><li>VAT Returns & Compliance</li><li>PAYE & P9 Forms</li><li>Turnover Tax (TOT)</li><li>KRA PIN Registration</li><li>eTims Onboarding & Integration</li><li>Tax Compliance Certificate (TCC)</li><li>Withholding Tax Returns</li><li>Advance Tax Payments</li><li>Tax Amnesty Applications</li><li>Objection & Appeal Filing</li><li>SHA (NHIF) Registration</li><li>NSSF & NITA Compliance</li><li>HELB Clearance & Loans</li><li>Work Injury Benefits (WIBA)</li><li>Payslip Generation & Printing</li><li>Annual Returns (CR12)</li><li>Tax PIN for Foreigners</li><li>Customs & Excise Duty</li>
+            </ul></div>
+            <!-- 2. eCitizen Hub (expanded) -->
+            <div class="card"><h3>🆔 E-CITIZEN HUB</h3><ul>
+                <li>Passport Application / Renewal</li><li>Police Clearance Certificate</li><li>Driving License (New/Renewal)</li><li>National ID Application</li><li>Birth Certificate (Late Registration)</li><li>Death Certificate</li><li>Marriage Certificate</li><li>Divorce Certificate</li><li>Business Name Registration (BN/2)</li><li>Company Registration (eRegistrar)</li><li>CR12 & CR13 Certificates</li><li>Single Business Permit</li><li>NEMA Licenses</li><li>Visa & Immigration Services</li><li>Work Permits (Class D, M, etc.)</li><li>Alien ID & Foreign Certificate</li><li>CRB Clearance & Credit Report</li><li>Vehicle Transfer & Logbook</li><li>Driving School Licensing</li><li>Public Service Vehicle (PSV) Badge</li>
+            </ul></div>
+            <!-- 3. Education & CBC (expanded) -->
+            <div class="card"><h3>🎓 EDUCATION & CBC</h3><ul>
+                <li>Schemes of Work (PP1-Grade 12)</li><li>Lesson Plans & Lesson Notes</li><li>Record of Work Covered</li><li>Learner Assessment Sheets</li><li>Report Cards & Transcripts</li><li>KNEC Registration (KCPE/KCSE)</li><li>KCSE/KCPE Results Slips</li><li>NEMIS Updates & Capturing</li><li>School Email & Portal Setup</li><li>Exam Printing & Materials</li><li>CBC Training Workshops</li><li>Institution Registration (MoE)</li><li>Teacher Service Commission (TSC) Services</li><li>TPAD & Performance Appraisal</li><li>School Website Development</li><li>Digital Learning Content</li><li>E-Learning Platforms</li><li>Library Management Systems</li><li>School Calendar & Timetabling</li><li>Guidance & Counseling Resources</li>
+            </ul></div>
+            <!-- 4. Creative Studio (expanded) -->
+            <div class="card"><h3>🎨 CREATIVE STUDIO</h3><ul>
+                <li>Wedding & Invitation Cards</li><li>Eulogy / Memorial Cards</li><li>Business Cards & Letterheads</li><li>Professional Logo Design</li><li>Flyers, Posters, Banners</li><li>T-Shirt & Brand Printing</li><li>Passport & Visa Photos</li><li>Photo Editing & Restoration</li><li>Lamination & Binding</li><li>Social Media Graphics</li><li>Video Editing & Animation</li><li>3D Logo & Mockups</li><li>Brochures & Booklets</li><li>Magazine & Newspaper Ads</li><li>Outdoor Signage & Billboards</li><li>Packaging & Label Design</li><li>Illustrations & Caricatures</li><li>Corporate Identity Kits</li><li>PowerPoint & Presentation Design</li><li>Resume & CV Writing</li>
+            </ul></div>
+            <!-- 5. Cyber & Tech (expanded) -->
+            <div class="card"><h3>🏢 CYBER & TECH</h3><ul>
+                <li>Website Development (Custom)</li><li>E-Commerce & Online Stores</li><li>Mobile App Development</li><li>IT Consultancy & Security</li><li>Domain Registration (.ke, .com)</li><li>Web Hosting & SSL Certificates</li><li>Professional Email (Google Workspace)</li><li>CCTV Installation & Monitoring</li><li>Networking & Wi-Fi Setup</li><li>Data Recovery & Backup</li><li>Computer Repair & Maintenance</li><li>Point of Sale (POS) Systems</li><li>Bulk SMS & Email Marketing</li><li>Online Jobs & Freelancing</li><li>Typing & Document Formatting</li><li>Scanning & Archiving</li><li>Virtual Assistant Services</li><li>Cybersecurity Audits</li><li>Cloud Solutions (Google, AWS)</li><li>Software Training & Tutorials</li>
+            </ul></div>
+            <!-- 6. Business Support (NEW) -->
+            <div class="card"><h3>📊 BUSINESS SUPPORT</h3><ul>
+                <li>Business Plan Writing</li><li>Feasibility Studies</li><li>Market Research & Surveys</li><li>Company Profile Creation</li><li>NGO & Society Registration</li><li>AGPO Certification (Youth, Women, PWD)</li><li>NCA Registration & Renewal</li><li>Trademark & Patent Filing</li><li>Public Procurement (PPRA)</li><li>County Government Licenses</li><li>Import/Export Documentation</li><li>KRA PIN for Companies</li><li>Tax Advisory & Planning</li><li>Bookkeeping & Accounting</li><li>Payroll Management</li><li>Financial Statements Preparation</li><li>Business Name Search & Reservation</li><li>CRB Clearance for Business</li><li>Branding & Marketing Strategy</li><li>Social Media Management</li>
+            </ul></div>
+            <!-- 7. Legal & Compliance (NEW) -->
+            <div class="card"><h3>⚖️ LEGAL & COMPLIANCE</h3><ul>
+                <li>Affidavits & Statutory Declarations</li><li>Power of Attorney</li><li>Wills & Testaments</li><li>Lease & Tenancy Agreements</li><li>Contract Drafting & Review</li><li>Company Secretarial Services</li><li>Annual Returns Filing (CR12)</li><li>Change of Company Directors</li><li>Increase of Share Capital</li><li>Mergers & Acquisitions</li><li>Legal Notices & Demand Letters</li><li>Divorce & Separation Agreements</li><li>Child Custody & Maintenance</li><li>Succession & Probate</li><li>Land Title Search & Transfer</li><li>Caution & Caveat Registration</li><li>Intellectual Property Rights</li><li>Employment Contracts</li><li>Compliance Audits</li><li>Notary Public Services</li>
+            </ul></div>
+            <!-- 8. Digital Marketing (NEW) -->
+            <div class="card"><h3>📈 DIGITAL MARKETING</h3><ul>
+                <li>Social Media Management (FB, IG, X)</li><li>Facebook & Instagram Ads</li><li>Google Ads (Search & Display)</li><li>YouTube Channel Management</li><li>SEO & Content Writing</li><li>Email Marketing Campaigns</li><li>WhatsApp Business API</li><li>Lead Generation & Funnels</li><li>Analytics & Reporting</li><li>Influencer Outreach</li><li>Reputation Management</li><li>Local SEO & Google My Business</li><li>Video Production for Ads</li><li>Graphic Design for Campaigns</li><li>Copywriting & Ad Scripts</li><li>Landing Page Optimization</li><li>E‑Commerce Marketing</li><li>Affiliate Program Setup</li><li>Webinar & Event Promotion</li><li>Branding & Positioning</li>
+            </ul></div>
+        </div>
+
+        <!-- Dynamic Media Gallery -->
+        <div id="media-display"></div>
+
+        <!-- AI Terminal -->
+        <div id="terminal">
+            <div id="stream"><div>❄️ [SKYNET AI]: Snow-blue core online. Ask about services, pricing, or KRA. Type 'help'.</div></div>
+            <div class="input-bar">
+                <input type="text" id="query" placeholder="e.g. passport renewal cost ..." onkeypress="if(event.key==='Enter') runAI()">
+                <button class="btn-run" onclick="runAI()">SEND</button>
+            </div>
+        </div>
+
+        <div class="contact-footer">
+            <b>📞 24/7 SUPPORT:</b> 0713614441  |  0119854200  |  skynet@cyber.pro
+        </div>
+    </div>
+
+    <button id="whatsapp-trigger" onclick="openWA()"><span style="margin-right:12px; font-size:1.5rem;">💬</span> WHATSAPP GROUP</button>
+    <div id="community-icon" onclick="toggleCommunityPanel()">💬</div>
+    <div id="community-panel">
+        <div class="community-header"><span>💭 COMMUNITY TALK</span><span style="cursor:pointer; font-size:22px;" onclick="toggleCommunityPanel()">✕</span></div>
+        <div class="community-messages" id="community-messages-list"></div>
+        <div class="community-input-area">
+            <input type="text" id="communityMsgInput" placeholder="Share a tip or ask...">
+            <button onclick="postCommunityMessage()">➤</button>
+        </div>
+    </div>
+
+    <script>
+        // GLOBALS
+        let IS_ADMIN = false;
+        const ADMIN_PASS = "SKYNET@26";
+        let topicCount = 0, mediaCount = 0;
+
+        window.openWA = () => window.open('https://chat.whatsapp.com/EfbuSz4x2o9GOzmUAb9QDG', '_blank').focus();
+
+        // Admin tab switching
+        window.switchAdminTab = (tab) => {
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.admin-pane').forEach(p => p.classList.remove('active'));
+            document.querySelector(`.admin-tab[onclick*="${tab}"]`).classList.add('active');
+            document.getElementById(`pane-${tab}`).classList.add('active');
+        };
+
+        // Cloud sync init
+        window.addEventListener('load', () => {
+            window.syncTopics((data) => {
+                document.querySelectorAll('.dynamic-card').forEach(el => el.remove());
+                const entries = Object.entries(data);
+                topicCount = entries.length;
+                document.getElementById('topic-count').textContent = topicCount;
+                entries.forEach(([id, topic]) => renderTopic(id, topic.title, topic.desc));
+            });
+            window.syncMedia((data) => {
+                document.querySelectorAll('.media-container[data-cloud-id]').forEach(el => el.remove());
+                const entries = Object.entries(data);
+                mediaCount = entries.length;
+                document.getElementById('media-count').textContent = mediaCount;
+                entries.forEach(([id, media]) => renderMedia(id, media.type, media.data));
+            });
+            loadCommunityMessages();
+            const connectedRef = ref(window.db, '.info/connected');
+            onValue(connectedRef, (snap) => {
+                document.getElementById('sync-status').textContent = snap.val() ? '● SYNC LIVE' : '○ OFFLINE';
+                document.getElementById('sync-status').style.background = snap.val() ? '#28a745' : '#dc3545';
+            });
+        });
+
+        function renderTopic(id, title, desc) {
+            const card = document.createElement('div');
+            card.className = 'card dynamic-card';
+            card.id = `topic-${id}`;
+            card.innerHTML = `<button class="admin-delete-btn" style="${IS_ADMIN ? 'display:block' : ''}" onclick="deleteTopicCloud('${id}')">🗑️ DELETE</button><h3>📌 ${title}</h3><ul><li>${desc}</li></ul>`;
+            document.getElementById('main-grid').appendChild(card);
+        }
+        function renderMedia(id, type, data) {
+            const container = document.createElement('div');
+            container.className = 'media-container';
+            container.setAttribute('data-cloud-id', id);
+            container.id = `media-${id}`;
+            container.innerHTML = `<button class="admin-delete-btn" style="${IS_ADMIN ? 'display:block' : ''}" onclick="deleteMediaCloud('${id}')">🗑️</button>${type==='img'?`<img src="${data}">`:`<video src="${data}" controls></video>`}`;
+            document.getElementById('media-display').appendChild(container);
+        }
+
+        window.unlockAdmin = function() {
+            if(document.getElementById('admPass').value === ADMIN_PASS) {
+                IS_ADMIN = true;
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('admin-tools').style.display = 'block';
+                document.querySelectorAll('.admin-delete-btn').forEach(btn => btn.style.display = 'block');
+                addTerminalMessage("🔓 Admin access granted. Cloud sync active.");
+                updateStats();
+            } else alert("⛔ ACCESS DENIED");
+        };
+        window.lockAdmin = function() {
+            IS_ADMIN = false;
+            document.getElementById('admPass').value = "";
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('admin-tools').style.display = 'none';
+            document.querySelectorAll('.admin-delete-btn').forEach(btn => btn.style.display = 'none');
+        };
+        window.addTopic = function() {
+            if(!IS_ADMIN) return;
+            const title = document.getElementById('topicTitle').value.trim();
+            const desc = document.getElementById('topicDesc').value.trim();
+            if(title) { window.addTopicToCloud(title, desc); document.getElementById('topicTitle').value = ''; document.getElementById('topicDesc').value = ''; }
+        };
+        window.deleteTopicCloud = (id) => { if(IS_ADMIN && confirm('Delete this topic?')) window.deleteTopicFromCloud(id); };
+        window.uploadMedia = function() {
+            if(!IS_ADMIN) return;
+            const input = document.getElementById('mediaInput');
+            [...input.files].forEach(f => {
+                const r = new FileReader();
+                r.onload = e => window.addMediaToCloud(f.type.startsWith('image/')?'img':'video', e.target.result);
+                r.readAsDataURL(f);
+            });
+            input.value = '';
+        };
+        window.deleteMediaCloud = (id) => { if(IS_ADMIN && confirm('Delete this media?')) window.deleteMediaFromCloud(id); };
+
+        function updateStats() {
+            document.getElementById('community-count').textContent = JSON.parse(localStorage.getItem('skynet_community')||'[]').length;
+        }
+
+        // Community (local)
+        const COMMUNITY_KEY = 'skynet_community';
+        window.toggleCommunityPanel = () => {
+            const p = document.getElementById('community-panel');
+            p.style.display = p.style.display === 'flex' ? 'none' : 'flex';
+            if(p.style.display === 'flex') loadCommunityMessages();
+        };
+        window.loadCommunityMessages = () => {
+            const msgs = JSON.parse(localStorage.getItem(COMMUNITY_KEY)||'[]');
+            const cont = document.getElementById('community-messages-list');
+            cont.innerHTML = msgs.length ? '' : '<div style="color:#6c8da8; text-align:center; padding:20px;">✨ Be the first to share!</div>';
+            msgs.slice(-30).forEach(m => {
+                const b = document.createElement('div'); b.className='msg-bubble';
+                b.innerHTML = `<div>${m.text}</div><div class="msg-time">${m.time}</div>`;
+                cont.appendChild(b);
+            });
+            cont.scrollTop = cont.scrollHeight;
+            updateStats();
+        };
+        window.postCommunityMessage = () => {
+            const inp = document.getElementById('communityMsgInput');
+            const text = inp.value.trim();
+            if(!text) return;
+            const msgs = JSON.parse(localStorage.getItem(COMMUNITY_KEY)||'[]');
+            msgs.push({ text, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) });
+            localStorage.setItem(COMMUNITY_KEY, JSON.stringify(msgs));
+            inp.value = '';
+            loadCommunityMessages();
+        };
+
+        function addTerminalMessage(text, isAI=true) {
+            const stream = document.getElementById('stream');
+            const div = document.createElement('div');
+            div.style.margin = '8px 0';
+            div.style.color = isAI ? '#004a7c' : '#1a2e3b';
+            div.innerHTML = isAI ? `[AI]: ${text}` : `>> ${text}`;
+            stream.appendChild(div);
+            stream.scrollTop = stream.scrollHeight;
+        }
+        window.runAI = function() {
+            const inp = document.getElementById('query');
+            const val = inp.value.trim();
+            if(!val) return;
+            addTerminalMessage(val, false);
+            let res = "I'm Skynet Pro. Call/WhatsApp 0713614441.";
+            const q = val.toLowerCase();
+            if(q.includes("kra")) res = "📊 KRA returns: Indv Ksh 500, Co. Ksh 2,500.";
+            else if(q.includes("passport")) res = "🛂 Passport: Ksh 4,550 (34pg) / 6,050 (50pg).";
+            else if(q.includes("good conduct")) res = "👮 Police Clearance: Ksh 1,050.";
+            else if(q.includes("driving")) res = "🚗 DL renewal: Ksh 650.";
+            else if(q.includes("scheme")) res = "📚 Schemes from Ksh 300.";
+            else if(q.includes("help")) res = "📋 Try: KRA, passport, good conduct, driving license, scheme.";
+            setTimeout(() => addTerminalMessage(res, true), 350);
+            inp.value = "";
+        };
+
+        // WebGL (unchanged)
+        (function(){
+            const canvas = document.getElementById('bg-canvas');
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+            camera.position.z = 6;
+            const g = new THREE.BufferGeometry();
+            const c = 4500, pos = new Float32Array(c*3), col = new Float32Array(c*3);
+            for(let i=0; i<c*3; i+=3) {
+                const r=7+Math.random()*9, th=Math.random()*Math.PI*2, ph=Math.acos(2*Math.random()-1);
+                pos[i]=Math.sin(ph)*Math.cos(th)*r; pos[i+1]=Math.sin(ph)*Math.sin(th)*r; pos[i+2]=Math.cos(ph)*r;
+                let rc,gc,bc; const ch=Math.random();
+                if(ch<0.6){rc=0.4;gc=0.7;bc=1.0;}else if(ch<0.85){rc=0.95;gc=0.97;bc=1.0;}else{rc=0.0;gc=0.3;bc=0.7;}
+                col[i]=rc; col[i+1]=gc; col[i+2]=bc;
+            }
+            g.setAttribute('position', new THREE.BufferAttribute(pos,3));
+            g.setAttribute('color', new THREE.BufferAttribute(col,3));
+            const p = new THREE.Points(g, new THREE.PointsMaterial({size:0.06, vertexColors:true, transparent:true, blending:THREE.AdditiveBlending}));
+            scene.add(p);
+            (function animate(){ requestAnimationFrame(animate); p.rotation.y+=0.0007; p.rotation.x=Math.sin(performance.now()*0.0005)*0.04; renderer.render(scene,camera); })();
+            window.addEventListener('resize', ()=>{ camera.aspect=window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth,window.innerHeight); });
+        })();
+    </script>
+</body>
+  </html>
